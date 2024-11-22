@@ -43,8 +43,10 @@ router.post('/', upload.single('image'), async (req, res) => {
     const requiredFields = [
       'name',
       'school',
-      'help_hub',
-      'current_game'
+      'hub',
+      'current_game',
+      'age',
+      'Gender'
     ];
 
     const missingFields = requiredFields.filter(field => !req.body[field]);
