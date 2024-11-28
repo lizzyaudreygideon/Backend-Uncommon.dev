@@ -13,7 +13,7 @@ const app = express();
 // Basic CORS setup
 const allowedOrigins = [
   'http://localhost:3000',  // Development
-  'https://your-production-domain.com',
+  'https://uncommonprogresstrack.netlify.app',
   'capacitor://localhost',  // For mobile apps using Capacitor
   'ionic://localhost',      // For Ionic apps
   'exp://localhost:19000',  // For Expo development
