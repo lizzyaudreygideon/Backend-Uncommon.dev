@@ -12,7 +12,7 @@ dotenv.config();
 const app = express();
 
 // Define allowed origins for CORS
-const allowedOrigins = ['http://localhost:3000', 'http://yourfrontenddomain.com']; // Add your frontend URL(s) here
+const allowedOrigins = ['http://localhost:3000', 'https://uncommonprogresstrack.netlify.app','http://localhost:3001', '*' ]; // Add your frontend URL(s) here
 
 // Basic CORS setup
 app.use(cors({
@@ -34,6 +34,9 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// Serve static files from the 'uploads' directory
+app.use('/uploads', express.static('uploads'));  // Serve images from 'uploads' folder
 
 // Database connection
 mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true, useUnifiedTopology: true })

@@ -1,4 +1,3 @@
-// routes/studentRoutes.js
 const express = require('express');
 const router = express.Router();
 const studentController = require('../controllers/studentController');
@@ -34,17 +33,36 @@ const upload = multer({
   }
 });
 
-// Route to create a student (one at a time)
+// Delete a student
+router.delete('/:id', async (req, res) => {
+  try {
+    const studentId = req.params.id;
+
+    const deletedStudent = await studentController.deleteStudent(studentId);
+
+    if (!deletedStudent) {
+      return res.status(404).json({ message: 'Student not found' });
+    }
+
+    res.status(200).json({ message: 'Student deleted successfully', student: deletedStudent });
+  } catch (error) {
+    console.error('Error deleting student:', error);
+    res.status(500).json({
+      message: 'Error deleting student',
+      error: error.message,
+    });
+  }
+});
+
+// Route to create a student
 router.post('/', upload.single('image'), async (req, res) => {
   try {
     const { username, school, hub, age, gender, email } = req.body;
 
-    // Check if the required fields are present
     if (!username || !school || !hub || !age || !email) {
       return res.status(400).json({ message: 'Please provide all required fields: username, school, hub, age, and email.' });
     }
 
-    // Prepare the student data
     const studentData = {
       username,
       school,
@@ -55,7 +73,6 @@ router.post('/', upload.single('image'), async (req, res) => {
       image: req.file ? req.file.path : null
     };
 
-    // Create the student
     const newStudent = await studentController.createStudent(studentData);
     res.status(201).json(newStudent);
   } catch (error) {
@@ -66,6 +83,8 @@ router.post('/', upload.single('image'), async (req, res) => {
     });
   }
 });
+
+
 
 // Get all students
 router.get('/', async (req, res) => {
@@ -78,5 +97,77 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Export the routes
+// Route to get distinct hubs
+router.get('/hubs', async (req, res) => {
+  try {
+    const hubs = await studentController.getDistinctHubs();
+    res.status(200).json(hubs);
+  } catch (error) {
+    console.error('Error fetching hubs:', error);
+    res.status(500).json({
+      message: 'Error fetching hubs',
+      error: error.message,
+    });
+  }
+});
+
+// Route to get distinct schools
+router.get('/schools', async (req, res) => {
+  try {
+    const schools = await studentController.getDistinctSchools();
+    res.status(200).json(schools);
+  } catch (error) {
+    console.error('Error fetching schools:', error);
+    res.status(500).json({
+      message: 'Error fetching schools',
+      error: error.message,
+    });
+  }
+});
+
+// Route to get distinct genders
+router.get('/genders', async (req, res) => {
+  try {
+    const genders = await studentController.getDistinctGenders();
+    res.status(200).json(genders);
+  } catch (error) {
+    console.error('Error fetching genders:', error);
+    res.status(500).json({
+      message: 'Error fetching genders',
+      error: error.message,
+    });
+  }
+});
+
+
+// Update a student
+router.put('/:id', upload.single('image'), async (req, res) => {
+  try {
+    const studentId = req.params.id;
+    const { username, school, hub, age, gender, email } = req.body;
+
+    const updateData = {
+      username,
+      school,
+      hub,
+      age,
+      gender: gender || '',
+      email,
+    };
+
+    if (req.file) {
+      updateData.image = req.file.path;
+    }
+
+    const updatedStudent = await studentController.updateStudent(studentId, updateData);
+    res.status(200).json(updatedStudent);
+  } catch (error) {
+    console.error('Error updating student:', error);
+    res.status(500).json({
+      message: 'Error updating student',
+      error: error.message
+    });
+  }
+});
+
 module.exports = router;

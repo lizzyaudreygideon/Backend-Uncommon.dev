@@ -25,6 +25,41 @@ const createStudent = async (studentData) => {
   }
 };
 
+// Get distinct hubs
+const getDistinctHubs = async () => {
+  try {
+    const hubs = await Student.distinct('hub');
+    return hubs;
+  } catch (error) {
+    console.error('Error fetching hubs:', error);
+    throw new Error('Error fetching hubs: ' + error.message);
+  }
+};
+
+// Get distinct schools
+const getDistinctSchools = async () => {
+  try {
+    const schools = await Student.distinct('school');
+    return schools;
+  } catch (error) {
+    console.error('Error fetching schools:', error);
+    throw new Error('Error fetching schools: ' + error.message);
+  }
+};
+
+// Get distinct genders
+const getDistinctGenders = async () => {
+  try {
+    const genders = await Student.distinct('gender');
+    return genders;
+  } catch (error) {
+    console.error('Error fetching genders:', error);
+    throw new Error('Error fetching genders: ' + error.message);
+  }
+};
+
+
+
 // Update a student
 const updateStudent = async (studentId, updateData) => {
   try {
@@ -42,6 +77,8 @@ const updateStudent = async (studentId, updateData) => {
     throw new Error('Error updating student: ' + error.message);
   }
 };
+
+
 
 // Delete a student
 const deleteStudent = async (studentId) => {
@@ -66,8 +103,11 @@ const deleteStudent = async (studentId) => {
 };
 
 module.exports = {
-  getAllStudents,
-  createStudent,
-  updateStudent,
-  deleteStudent
-};
+    getAllStudents,
+    createStudent,
+    updateStudent,
+    deleteStudent,
+    getDistinctHubs,
+    getDistinctSchools,
+    getDistinctGenders
+}
